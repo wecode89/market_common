@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../fmm_monitor/.idea/fmm_monitor.iml" filepath="$PROJECT_DIR$/../fmm_monitor/.idea/fmm_monitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../magic_lib/.idea/magic_lib.iml" filepath="$PROJECT_DIR$/../magic_lib/.idea/magic_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/market_common.iml" filepath="$PROJECT_DIR$/.idea/market_common.iml" />
       <module fileurl="file://$PROJECT_DIR$/../market_data_api/.idea/market_data_api.iml" filepath="$PROJECT_DIR$/../market_data_api/.idea/market_data_api.iml" />
       <module fileurl="file://$PROJECT_DIR$/../market_scanner/.idea/market_scanner.iml" filepath="$PROJECT_DIR$/../market_scanner/.idea/market_scanner.iml" />

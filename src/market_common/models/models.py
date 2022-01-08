@@ -20,6 +20,25 @@ class Symbol(JsonBase):
         assert self.symbol is not None
 
 
+class CompanyInfo(JsonBase):
+    def __init__(self, symbol=None, company=None, exchange=None, industry=None, sector=None):
+        self.symbol = symbol
+        self.company = company
+        self.exchange = exchange
+        self.industry = industry
+        self.sector = sector
+
+        assert self.company is not None
+
+
+class CompanyLogo(JsonBase):
+    def __init__(self, symbol=None, url=None):
+        self.symbol = symbol
+        self.url = url
+
+        assert self.url is not None
+
+
 class Quote(JsonBase):
     def __init__(self, symbol=None, date=None, open=None, high=None, low=None, close=None, volume=None,
                  previous_close=None, previous_volume=None):

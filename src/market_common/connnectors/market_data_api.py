@@ -1,6 +1,6 @@
 import json
 import requests
-from src.market_common.models.models import HistoricData
+from market_common.models.models import HistoricData
 
 
 class MarketDataAPI:
@@ -11,11 +11,12 @@ class MarketDataAPI:
 
     def _get_url(self, path):
         url = '{}://{}:{}/{}'.format(self.protocol, self.host, self.port, path)
+        print("----> url: {}".format(url))
         return url
 
     def _request(self, url):
         response = requests.get(url)
-        data = json.load(response.content)
+        data = json.loads(response.content)
         return data
 
     def get_quotes(self, symbols):
@@ -42,4 +43,5 @@ class MarketDataAPI:
     def get_symbols(self):
         url = self._get_url('/api/v1/symbols')
         data = self._request(url)
+        return data
     
