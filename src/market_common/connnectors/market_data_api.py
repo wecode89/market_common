@@ -1,6 +1,12 @@
 import json
+import os
 import requests
-from market_common.models.models import HistoricData
+from datetime import datetime
+from magic_lib.misc.log import get_logger
+from market_common.models.models import Symbol, Quote, HistoricData
+
+
+logger = get_logger(os.path.basename(__file__), level=os.environ.get('LOG_LEVEL', 'DEBUG'))
 
 
 class MarketDataAPI:
@@ -10,38 +16,75 @@ class MarketDataAPI:
         self.port = port
 
     def _get_url(self, path):
-        url = '{}://{}:{}/{}'.format(self.protocol, self.host, self.port, path)
-        print("----> url: {}".format(url))
+        url = '{}://{}:{}{}'.format(self.protocol, self.host, self.port, path)
         return url
 
     def _request(self, url):
-        response = requests.get(url)
-        data = json.loads(response.content)
-        return data
+        try:
+            response = requests.get(url)
+            data = json.loads(response.content)
+            return data
+        except Exception as e:
+            logger.error("url: {}".format(e))
 
     def get_quotes(self, symbols):
-        url = self._get_url('/api/v1/quotes/'.format(','.join(symbols)))
+        url = self._get_url('/api/v1/quotes/{}'.format(','.join(symbols)))
         data = self._request(url)
 
-        historic_data = [HistoricData(symbol=x['symbol'],
-                                      date=convert_str_to_datetime_tz(x['date'], format='%Y-%m-%d'),
-                                      open=x['open'],
-                                      high=x['high'],
-                                      low=x['low'],
-                                      close=x['close'],
-                                      volume=x['volume']) for x in data.get('data', [])]
-        return historic_data
+        quotes = []
+        try:
+            for x in data['data']:
+                try:
+                    quote = Quote(symbol=x['symbol'],
+                                  date=datetime.strptime(x['date'], "%Y-%m-%d %H:%M:%S"),
+                                  open=x['open'],
+                                  high=x['high'],
+                                  low=x['low'],
+                                  close=x['close'],
+                                  volume=x['volume'],
+                                  previous_close=None,
+                                  previous_volume=None)
+                    quotes.append(quote)
+                except Exception as e:
+                    logger.error("url: {}".format(e))
+        except Exception as e:
+            logger.error("url: {}".format(e))
+        return quotes
 
     def get_intraday(self, symbol):
         url = self._get_url('/api/v1/intraday-data/{}/{}?days='.format(symbol, days))
         data = self._request(url)
 
     def get_historic(self, symbol, days=100):
-        url = self._get_url('/api/v1/historic-data/{}/{}?days='.format(symbol, days))
+        url = self._get_url('/api/v1/historic-data/{}?days={}'.format(symbol, days))
         data = self._request(url)
+
+        ohlcs = []
+        try:
+            for x in data['data']:
+                try:
+                    item = HistoricData(symbol=symbol,
+                                        date=datetime.strptime(x['date'], "%Y-%m-%d"),
+                                        open=x['open'],
+                                        high=x['high'],
+                                        low=x['low'],
+                                        close=x['close'],
+                                        volume=x['volume'])
+                    ohlcs.append(item)
+                except Exception as e:
+                    logger.error("url: {}".format(e))
+        except Exception as e:
+            logger.error("url: {}".format(e))
+        return ohlcs
 
     def get_symbols(self):
         url = self._get_url('/api/v1/symbols')
         data = self._request(url)
-        return data
-    
+
+        try:
+            symbols = [Symbol(symbol=x['symbol'],
+                              exchange=x['exchange'],
+                              region=x['region'], ) for x in data['data']]
+            return symbols
+        except Exception as e:
+            logger.error("url: {}".format(e))
