@@ -3,11 +3,11 @@ from magic_lib.misc.encode import JsonBase
 
 
 class StockAlert(JsonBase):
-    def __init__(self, symbol=None, interval=None, _type=None, kind=None, rate=None):
+    def __init__(self, symbol=None, trading_type=None, scanner=None, condition=None, rate=None):
         self.symbol = symbol
-        self.interval = interval
-        self.type = _type
-        self.kind = kind
+        self.trading_type = trading_type
+        self.scanner = scanner
+        self.condition = condition
         self.rate = rate
 
 
