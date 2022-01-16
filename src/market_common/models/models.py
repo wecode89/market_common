@@ -2,15 +2,6 @@ import datetime
 from magic_lib.misc.encode import JsonBase
 
 
-class StockAlert(JsonBase):
-    def __init__(self, symbol=None, interval=None, _type=None, kind=None, rate=None):
-        self.symbol = symbol
-        self.interval = interval
-        self.type = _type
-        self.kind = kind
-        self.rate = rate
-
-
 class Symbol(JsonBase):
     def __init__(self, symbol=None, exchange=None, region=None):
         self.symbol = symbol
@@ -107,3 +98,13 @@ class HistoricData:
             'volume': self.volume
         }
         return data
+
+
+class StockAlert(JsonBase):
+    def __init__(self, symbol=None, interval=None, _type=None, kind=None, rate=None, quote_obj=None):
+        self.symbol = symbol
+        self.interval = interval
+        self.type = _type
+        self.kind = kind
+        self.rate = rate
+        self.quote_obj = quote_obj
