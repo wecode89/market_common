@@ -87,4 +87,4 @@ class MarketDataAPI:
                               region=x['region'], ) for x in data['data']]
             return symbols
         except Exception as e:
-            logger.error("url: {}".format(e))
+            logger.error("url: {}, error: {}".format(url, e))

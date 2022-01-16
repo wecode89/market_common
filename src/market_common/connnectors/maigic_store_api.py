@@ -22,21 +22,21 @@ class MagicStoreAPI:
             if method == 'GET':
                 response = requests.get(url)
             elif method == 'POST':
-                response = requests.post(url, data=json.dump(data))
+                response = requests.post(url, data=json.dumps(data))
 
             data = json.loads(response.content)
             return data
         except Exception as e:
-            logger.error("url: {}".format(e))
+            logger.error("url: {}, error: {}".format(url, e))
 
     def create(self, db=None, collection=None, doc=None):
-        path = '/{}/{}/document/create'.format(db, collection)
+        path = '/api/v1/{}/{}/document/create'.format(db, collection)
         url = self._get_url(path)
         response = self._request(url, method='POST', data=doc)
         return response
 
     def search(self, db=None, collection=None):
-        path = '/{}/{}/document/search'.format(db, collection)
+        path = '/api/v1/{}/{}/document/search'.format(db, collection)
         url = self._get_url(path)
         response = self._request(url)
         return response
