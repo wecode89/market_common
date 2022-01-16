@@ -101,10 +101,35 @@ class HistoricData:
 
 
 class StockAlert(JsonBase):
-    def __init__(self, symbol=None, interval=None, _type=None, kind=None, rate=None, quote_obj=None):
+    def __init__(self, symbol=None, trading_type=None, scanner=None, condition=None, rate=None, detail=None,
+                 quote_obj=None):
         self.symbol = symbol
-        self.interval = interval
-        self.type = _type
-        self.kind = kind
+        self.trading_type = trading_type
+        self.scanner = scanner
+        self.condition = condition
         self.rate = rate
+        self.detail = detail
         self.quote_obj = quote_obj
+        
+    def to_json(self):
+        # dump data
+        quote_obj = {
+            'symbol': self.quote_obj.symbol,
+            'date': self.quote_obj.date.strftime('%Y-%m-%d %H:%M:%S'),
+            'open': self.quote_obj.open,
+            'high': self.quote_obj.high,
+            'low': self.quote_obj.low,
+            'close': self.quote_obj.close,
+            'volume': self.quote_obj.volume
+        }
+
+        data = {
+            'symbol': self.symbol,
+            'trading_type': self.trading_type,
+            'scanner': self.scanner,
+            'condition': self.condition,
+            'rate': self.rate,
+            'detail': self.detail,
+            'quote': quote_obj
+        }
+        return data
