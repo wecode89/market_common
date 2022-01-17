@@ -101,7 +101,7 @@ class HistoricData:
 
 
 class StockAlert(JsonBase):
-    def __init__(self, symbol=None, trading_type=None, scanner=None, condition=None, rate=None, detail=None,
+    def __init__(self, symbol=None, date=None, trading_type=None, scanner=None, condition=None, rate=None, detail=None,
                  quote_obj=None):
         self.symbol = symbol
         self.trading_type = trading_type
@@ -125,6 +125,7 @@ class StockAlert(JsonBase):
 
         data = {
             'symbol': self.symbol,
+            'date': self.date.strftime('%Y-%m-%d'),
             'trading_type': self.trading_type,
             'scanner': self.scanner,
             'condition': self.condition,

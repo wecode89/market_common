@@ -29,8 +29,10 @@ class MagicStoreAPI:
         except Exception as e:
             logger.error("url: {}, error: {}".format(url, e))
 
-    def create(self, db=None, collection=None, doc=None):
+    def create(self, db=None, collection=None, doc=None, criteria=None):
         path = '/api/v1/{}/{}/document/create'.format(db, collection)
+        if criteria:
+            path = path + "?" + "&".join(["{}={}".format(k, v) for k, v in criteria.items()])
         url = self._get_url(path)
         response = self._request(url, method='POST', data=doc)
         return response
