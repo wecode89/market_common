@@ -18,6 +18,9 @@ class MagicStoreAPI:
         return url
 
     def _request(self, url, method='GET', data=None):
+        logger.debug("Url : {}".format(url))
+        logger.debug("data : {}".format(data))
+
         try:
             if method == 'GET':
                 response = requests.get(url)
@@ -30,6 +33,8 @@ class MagicStoreAPI:
             logger.error("url: {}, error: {}".format(url, e))
 
     def create(self, db=None, collection=None, doc=None, criteria=None):
+        logger.debug("criteria : {}".format(criteria))
+        
         path = '/api/v1/{}/{}/document/create'.format(db, collection)
         if criteria:
             path = path + "?" + "&".join(["{}={}".format(k, v) for k, v in criteria.items()])
