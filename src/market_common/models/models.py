@@ -104,6 +104,7 @@ class StockAlert(JsonBase):
     def __init__(self, symbol=None, date=None, trading_type=None, scanner=None, condition=None, rate=None, detail=None,
                  quote_obj=None):
         self.symbol = symbol
+        self.date = date
         self.trading_type = trading_type
         self.scanner = scanner
         self.condition = condition
