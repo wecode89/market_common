@@ -77,8 +77,11 @@ class MarketDataAPI:
             logger.error("url: {}".format(e))
         return ohlcs
 
-    def get_symbols(self):
+    def get_symbols(self, local=False):
         url = self._get_url('/api/v1/symbols')
+        if local:
+            url = url + "?local=true"
+
         data = self._request(url)
 
         try:
