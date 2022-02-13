@@ -83,8 +83,11 @@ class HistoricData:
         self.close = close
         self.volume = volume
 
+        if isinstance(self.date, datetime.datetime):
+            self.date = self.date.date()
+
         assert self.date is not None
-        assert isinstance(self.date, datetime.datetime)
+        assert not isinstance(self.date, str)
 
     def to_json(self):
         # dump data
