@@ -28,7 +28,7 @@ class MarketDataAPI:
             logger.error("url: {}".format(e))
 
     def get_company(self, symbols):
-        url = self._get_url('/api/v1/quotes/{}'.format(','.join(symbols)))
+        url = self._get_url('/api/v1/company/{}'.format(','.join(symbols)))
         data = self._request(url)
         data = data.get('data')
         if data:
