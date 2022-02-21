@@ -56,7 +56,7 @@ class MarketDataAPI:
                                   volume=x['volume'],
                                   previous_close=None,
                                   previous_volume=None,
-                                  market_cap=float(x.get('marketCap')))
+                                  market_cap=float(x.get('market_cap')))
                     quotes.append(quote)
                 except Exception as e:
                     logger.error("url: {}".format(e))

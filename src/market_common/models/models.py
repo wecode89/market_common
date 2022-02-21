@@ -107,7 +107,7 @@ class HistoricData:
 
 class StockAlert(JsonBase):
     def __init__(self, symbol=None, date=None, trading_type=None, scanner=None, condition=None, rate=None, detail=None,
-                 quote_obj=None):
+                 quote_obj=None, company_obj=None):
         self.symbol = symbol
         self.date = date
         self.trading_type = trading_type
@@ -116,17 +116,27 @@ class StockAlert(JsonBase):
         self.rate = rate
         self.detail = detail
         self.quote_obj = quote_obj
+        self.company_obj = company_obj
         
     def to_json(self):
         # dump data
-        quote_obj = {
+        quote_json = {
             'symbol': self.quote_obj.symbol,
             'date': self.quote_obj.date.strftime('%Y-%m-%d %H:%M:%S'),
             'open': self.quote_obj.open,
             'high': self.quote_obj.high,
             'low': self.quote_obj.low,
             'close': self.quote_obj.close,
-            'volume': self.quote_obj.volume
+            'volume': self.quote_obj.volume,
+            'market_cap': self.quote_obj.market_cap
+        }
+
+        company_json = {
+            'symbol': self.company_obj.symbol,
+            'company': self.company_obj.company,
+            'exchange': self.company_obj.exchange,
+            'industry': self.company_obj.industry,
+            'sector': self.company_obj.sector
         }
 
         data = {
@@ -137,6 +147,7 @@ class StockAlert(JsonBase):
             'condition': self.condition,
             'rate': self.rate,
             'detail': self.detail,
-            'quote': quote_obj
+            'quote': quote_json,
+            'company': company_json
         }
         return data
