@@ -42,7 +42,7 @@ class Quote(JsonBase):
         self.volume = volume
         self.previous_close = previous_close
         self.previous_volume = previous_volume
-        self.market_cap = marketCap
+        self.market_cap = market_cap
 
         assert isinstance(self.date, datetime.datetime)
 
