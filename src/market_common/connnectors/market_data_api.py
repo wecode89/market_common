@@ -27,8 +27,8 @@ class MarketDataAPI:
         except Exception as e:
             logger.error("url: {}".format(e))
 
-    def get_company(self, symbols):
-        url = self._get_url('/api/v1/company/{}'.format(','.join(symbols)))
+    def get_company(self, symbol):
+        url = self._get_url('/api/v1/company/{}'.format(symbol))
         data = self._request(url)
         data = data.get('data')
         if data:
