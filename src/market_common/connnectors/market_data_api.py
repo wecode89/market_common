@@ -3,7 +3,7 @@ import os
 import requests
 from datetime import datetime
 from magic_lib.misc.log import get_logger
-from market_common.models.models import Symbol, Quote, HistoricData
+from market_common.models.models import Symbol, Quote, HistoricData, CompanyInfo
 
 
 logger = get_logger(os.path.basename(__file__), level=os.environ.get('LOG_LEVEL', 'DEBUG'))
@@ -27,6 +27,18 @@ class MarketDataAPI:
         except Exception as e:
             logger.error("url: {}".format(e))
 
+    def get_company(self, symbols):
+        url = self._get_url('/api/v1/quotes/{}'.format(','.join(symbols)))
+        data = self._request(url)
+        data = data.get('data')
+        if data:
+            company = CompanyInfo(symbol=data.get('symbol'),
+                                  company=data.get('company'),
+                                  exchange=data.get('exchange'),
+                                  industry=data.get('industry'),
+                                  sector=data.get('sector'),)
+            return company
+
     def get_quotes(self, symbols):
         url = self._get_url('/api/v1/quotes/{}'.format(','.join(symbols)))
         data = self._request(url)
@@ -43,7 +55,8 @@ class MarketDataAPI:
                                   close=x['close'],
                                   volume=x['volume'],
                                   previous_close=None,
-                                  previous_volume=None)
+                                  previous_volume=None,
+                                  market_cap=float(x.get('marketCap')))
                     quotes.append(quote)
                 except Exception as e:
                     logger.error("url: {}".format(e))

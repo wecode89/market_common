@@ -32,7 +32,7 @@ class CompanyLogo(JsonBase):
 
 class Quote(JsonBase):
     def __init__(self, symbol=None, date=None, open=None, high=None, low=None, close=None, volume=None,
-                 previous_close=None, previous_volume=None):
+                 previous_close=None, previous_volume=None, market_cap=None):
         self.symbol = symbol
         self.date = date
         self.open = open
@@ -42,6 +42,7 @@ class Quote(JsonBase):
         self.volume = volume
         self.previous_close = previous_close
         self.previous_volume = previous_volume
+        self.market_cap = marketCap
 
         assert isinstance(self.date, datetime.datetime)
 
@@ -54,7 +55,8 @@ class Quote(JsonBase):
             'high': self.high,
             'low': self.low,
             'close': self.close,
-            'volume': self.volume
+            'volume': self.volume,
+            'market_cap': self.market_cap
         }
         return data
 
