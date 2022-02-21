@@ -1,8 +1,11 @@
 import datetime
 import math
+import os
+from magic_lib.misc.log import get_logger
 from magic_lib.misc.encode import JsonBase
 
 
+logger = get_logger(os.path.basename(__file__), level=os.environ.get('LOG_LEVEL', 'DEBUG'))
 millnames = ['',' Thousand',' Million',' Billion',' Trillion']
 
 
@@ -129,8 +132,8 @@ class StockAlert(JsonBase):
         self.company_obj = company_obj
         
     def to_json(self):
-        # dump data
-        quote_json = {
+        # quote json
+        quote = {
             'symbol': self.quote_obj.symbol,
             'date': self.quote_obj.date.strftime('%Y-%m-%d %H:%M:%S'),
             'open': self.quote_obj.open,
@@ -141,13 +144,16 @@ class StockAlert(JsonBase):
             'market_cap': self.quote_obj.market_cap
         }
 
-        if quote_json['volume']:
-            quote_json['volume_verbal'] = millify(quote_json['volume'])
+        logger.debug("quote['volume']: %s", quote['volume'])
+        if quote['volume']:
+            quote['volume_verbal'] = millify(quote['volume'])
 
-        if quote_json['market_cap']:
-            quote_json['market_cap_verbal'] = millify(quote_json['market_cap'])
+        logger.debug("quote['market_cap']: %s", quote['market_cap'])
+        if quote['market_cap']:
+            quote['market_cap_verbal'] = millify(quote['market_cap'])
 
-        company_json = {
+        # company json
+        company = {
             'symbol': self.company_obj.symbol,
             'company': self.company_obj.company,
             'exchange': self.company_obj.exchange,
@@ -155,6 +161,7 @@ class StockAlert(JsonBase):
             'sector': self.company_obj.sector
         }
 
+        # alert json
         data = {
             'symbol': self.symbol,
             'date': self.date.strftime('%Y-%m-%d'),
@@ -163,7 +170,7 @@ class StockAlert(JsonBase):
             'condition': self.condition,
             'rate': self.rate,
             'detail': self.detail,
-            'quote': quote_json,
-            'company': company_json
+            'quote': quote,
+            'company': company
         }
         return data
