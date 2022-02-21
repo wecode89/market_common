@@ -1,5 +1,15 @@
 import datetime
+import math
 from magic_lib.misc.encode import JsonBase
+
+
+millnames = ['',' Thousand',' Million',' Billion',' Trillion']
+
+
+def millify(n):
+    n = float(n)
+    millidx = max(0, min(len(millnames)-1, int(math.floor(0 if n == 0 else math.log10(abs(n))/3))))
+    return '{:.0f}{}'.format(n / 10**(3 * millidx), millnames[millidx])
 
 
 class Symbol(JsonBase):
@@ -130,6 +140,12 @@ class StockAlert(JsonBase):
             'volume': self.quote_obj.volume,
             'market_cap': self.quote_obj.market_cap
         }
+
+        if quote_json['volume']:
+            quote_json['volume_verbal'] = millify(quote_json['volume'])
+
+        if quote_json['market_cap']:
+            quote_json['market_cap_verbal'] = millify(quote_json['market_cap'])
 
         company_json = {
             'symbol': self.company_obj.symbol,
