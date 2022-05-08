@@ -1,0 +1,20 @@
+name: Unit Test Run
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Python 3
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          PWD=$(pwd)
+          export PYTHONPATH=$PWD/src/py:$PWD/tests:PYTHONPATH
+          echo $PYTHONPATH
+          python -m unittest discover
